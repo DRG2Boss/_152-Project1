@@ -4,71 +4,165 @@
 // Due 8/2/23 11:59pm
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Digits {
+
+    // Create needed global variables.
+    public static int step = 0;
+    public static JButton firstNumberButton = new JButton();
+    public static int firstNumber = 0;
+    public static char operation;
+    public static int secondNumber = 0;
+    public static int computation = 0;
+    public static int target = 77;
+
     public static void main(String[] args) {
-        // construct JFrame variable
+        // Construct our window using JFrame variable.
         JFrame myWindow = new JFrame();
-        // Graphics initialization after constructing and before setVisible (so we don't see it resized in realtime).
+        // Give it an appropriate size, title, and ensure the operation ends upon closing the window.
         myWindow.setSize(500, 500);
-        myWindow.setTitle("Digits: A NYT's Ripoff");
-        // Make the close button on the window work
+        myWindow.setTitle("Digits: A NYT Ripoff!");
         myWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        JPanel panel0 = new JPanel();
-        JPanel panel1 = new JPanel();
-        JPanel panel2 = new JPanel();
-        JPanel panel3 = new JPanel();
-        JPanel bigPanel = new JPanel();
+        // Declare all other starting local variables.
+        JPanel innerPanelNum = new JPanel();
+        JPanel innerPanelOp = new JPanel();
+        JPanel outerPanel = new JPanel();
+        int[] values = new int[] {1, 2, 3, 4, 5, 25};
+        JTextArea operationLog = new JTextArea(6, 30);
 
-        JLabel direction = new JLabel();
-        direction.setText("Use the 6 provided numbers and 4 operators to create the following number:");
+        // Create the main text displayed to the user.
+        // Add this text to the outer panel.
+        JLabel instructText = new JLabel();
+        instructText.setText("Target: "+ target);
+        outerPanel.add(instructText);
 
-        JLabel randomTotal = new JLabel();
-        randomTotal.setText("Target: 136");
+        // Use a for loop to create the 6 number buttons.
+        // And add all of them to a panel.
+        for(int i = 0; i < 6; i++) {
+            JButton numberButton = new JButton();
+            numberButton.setText(""+values[i]);
+            innerPanelNum.add(numberButton);
 
-        JButton numberButton1 = new JButton();
-        numberButton1.setText("1");
-        JButton numberButton2 = new JButton();
-        numberButton2.setText("13");
-        JButton numberButton3 = new JButton();
-        numberButton3.setText("23");
-        JButton numberButton4 = new JButton();
-        numberButton4.setText("7");
-        JButton numberButton5 = new JButton();
-        numberButton5.setText("4");
-        JButton numberButton6 = new JButton();
-        numberButton6.setText("17");
+            // Use addActionListener function to track and do things upon clicking any of the numberButtons.
+            numberButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    System.out.println(numberButton.getText());
 
-        JButton operatorButton1 = new JButton();
-        operatorButton1.setText("+");
-        JButton operatorButton2 = new JButton();
-        operatorButton2.setText("-");
-        JButton operatorButton3 = new JButton();
-        operatorButton3.setText("*");
-        JButton operatorButton4 = new JButton();
-        operatorButton4.setText("/");
+                    if(step == 0) {
+                        firstNumber = Integer.parseInt(numberButton.getText());
+                        firstNumberButton = numberButton;
+                        step = 1;
+                    }
+                    if(step == 2) {
+                        secondNumber = Integer.parseInt(numberButton.getText());
+                        firstNumberButton.setVisible(false);
+                        step = 0;
 
-        panel0.add(direction);
-        panel1.add(randomTotal);
-        panel2.add(numberButton1);
-        panel2.add(numberButton2);
-        panel2.add(numberButton3);
-        panel2.add(numberButton4);
-        panel2.add(numberButton5);
-        panel2.add(numberButton6);
-        panel3.add(operatorButton1);
-        panel3.add(operatorButton2);
-        panel3.add(operatorButton3);
-        panel3.add(operatorButton4);
+                        if(operation == '+') {
+                            computation = firstNumber + secondNumber;
+                            System.out.println(computation);
+                            numberButton.setText(""+computation);
+                        }
+                        if(operation == '-') {
+                            computation = firstNumber - secondNumber;
+                            System.out.println(computation);
+                            numberButton.setText(""+computation);
+                        }
+                        if(operation == 'x') {
+                            computation = firstNumber * secondNumber;
+                            System.out.println(computation);
+                            numberButton.setText(""+computation);
+                        }
+                        if(operation == '/') {
+                            computation = firstNumber / secondNumber;
+                            System.out.println(computation);
+                            numberButton.setText(""+computation);
+                        }
+                        
+                        operationLog.append(""+firstNumber+operation+secondNumber+" = "+computation+"\n");
+                        
+                        if(computation == target) {
+                            instructText.setText("Congratulations! You Win!");
+                            step = 99;
+                        }
+                    }
+                }
+            });
+        }
 
-        // Add each panel to big panel
-        bigPanel.add(panel0);
-        bigPanel.add(panel1);
-        bigPanel.add(panel2);
-        bigPanel.add(panel3);
+        // Create the addition operator button.
+        JButton addButton = new JButton();
+        addButton.setText("+");
+        // Use addActionListener function to track and do things upon clicking this operator button.
+        addButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println(addButton.getText());
+                if(step == 1) {
+                    operation = '+';
+                    step = 2;
+                }
+            }
+        });
 
-        myWindow.add(bigPanel);
+        // Create the subtraction operator button.
+        JButton subtractButton = new JButton();
+        subtractButton.setText("-");
+        // Use addActionListener function to track and do things upon clicking this operator button.
+        subtractButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println(subtractButton.getText());
+                if(step == 1) {
+                    operation = '-';
+                    step = 2;
+                }
+            }
+        });
+
+        // Create the multiplication operator button.
+        JButton multiplyButton = new JButton();
+        multiplyButton.setText("*");
+        // Use addActionListener function to track and do things upon clicking this operator button.
+        multiplyButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println(multiplyButton.getText());
+                if(step == 1) {
+                    operation = 'x';
+                    step = 2;
+                }
+            }
+        });
+
+        // Create the division operator button.
+        JButton divideButton = new JButton();
+        divideButton.setText("/");
+        // Use addActionListener function to track and do things upon clicking this operator button.
+        divideButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println(divideButton.getText());
+                if(step == 1) {
+                    operation = '/';
+                    step = 2;
+                }
+            }
+        });
+
+        // Add each operator button to a panel.
+        innerPanelOp.add(addButton);
+        innerPanelOp.add(subtractButton);
+        innerPanelOp.add(multiplyButton);
+        innerPanelOp.add(divideButton);
+
+        // Incorporate the button panels and the operationLog into the outer panel.
+        outerPanel.add(innerPanelNum);
+        outerPanel.add(innerPanelOp);
+        outerPanel.add(operationLog);
+
+        // Add the outer panel containing everything to the window.
+        // Now that all other code has been run, make the window visible.
+        myWindow.add(outerPanel);
         myWindow.setVisible(true);
     }
 }
