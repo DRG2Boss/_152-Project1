@@ -1,4 +1,4 @@
-// Ryan McGonagle, Isaiah Marshall
+// Isaiah Marshall
 // Comp 152 Summer Session II
 // Project 1: Digits
 // Due 8/2/23 11:59pm
